@@ -38,6 +38,7 @@ async def read_root():
     return {"message": f"{settings.SERVICE_NAME} service"}
 
 
+# Note: A single Uvicorn worker is probably what you would want to use when using a distributed container management system like Kubernetes.
 if __name__ == "__main__":
     uvicorn.run(
         app="main:app",

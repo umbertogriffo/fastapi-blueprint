@@ -21,12 +21,12 @@ class Settings(BaseSettings):
     )
     # Application Configuration
     SERVICE_NAME: str = "Structure Logging"
-    ORIGINS: list = [
-        "http://localhost",
-        "http://localhost:8080",
-    ]
     HOST: str = "0.0.0.0"
     PORT: int = 8080
+    ORIGINS: list = [
+        "http://localhost",
+        f"http://localhost:{PORT}",
+    ]
 
     # Logging Configuration
     LOG_LEVEL: str = "INFO"

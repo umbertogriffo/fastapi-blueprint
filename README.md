@@ -77,3 +77,4 @@ curl -X GET \
 
 ## Resources
 - [Using uv with FastAPI](https://docs.astral.sh/uv/guides/integration/fastapi/#using-uv-with-fastapi)
+- [Deployments Concepts](https://fastapi.tiangolo.com/deployment/concepts/)

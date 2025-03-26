@@ -5,13 +5,18 @@
 
 A minimal FastAPI blueprint to start a project from scratch.
 
-Features:
+Repo Features:
  - 🛠️ configuration in a single file pyproject.toml
  - 📦 uv as package manager
  - 💅 ruff for linting and formatting
  - 🧪 pytest
  - 🧹 Makefile with code quality checks
  - 🐳 Optimized and secure Docker Image
+
+Application Features:
+ - ⚙️ Configurable with BaseSettings of Pydantic
+ - 📄 Structured Logging
+ - 🛡️ Shield — For secure and validated settings
 
 ## Prerequisites
 

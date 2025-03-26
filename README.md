@@ -4,6 +4,7 @@
 [![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 A minimal FastAPI blueprint to start a project from scratch.
+
 Features:
  - 🛠️ configuration in a single file pyproject.toml
  - 📦 uv as package manager

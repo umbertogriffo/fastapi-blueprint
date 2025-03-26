@@ -47,8 +47,6 @@ Run the Docker container locally with:
 docker run --rm -p 8080:8080 -v $(pwd)/.env:/usr/app/.env fastapi-app:latest
 ```
 
-docker run --rm -v -p 8080:8080 fastapi-app:latest
-
 ## Example of requests
 
 ```shell

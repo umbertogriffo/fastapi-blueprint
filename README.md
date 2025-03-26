@@ -11,7 +11,7 @@ Features:
  - 💅 ruff for linting and formatting
  - 🧪 pytest
  - 🧹 Makefile with code quality checks
- - 🐳 Optimized Docker Image
+ - 🐳 Optimized and secure Docker Image
 
 ## Prerequisites
 
@@ -47,7 +47,27 @@ Run the Docker container locally with:
 docker run --rm -p 8080:8080 -v $(pwd)/.env:/usr/app/.env fastapi-app:latest
 ```
 
+Run the service container by calling the following command from within the project folder:
+```commandline
+docker compose up -d --build
+```
+> [!NOTE]
+> or for docker version < 20.10.0:
+```commandline
+docker-compose up -d --build
+```
+
+To stop it:
+```commandline
+docker compose down
+```
+
 ## Example of requests
+
+```shell
+curl -X GET \
+  "http://127.0.0.1:8080/health"
+```
 
 ```shell
 curl -X GET \

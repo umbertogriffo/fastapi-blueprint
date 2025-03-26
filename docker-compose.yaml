@@ -1,0 +1,19 @@
+services:
+  service-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service-api
+    ports:
+      - "8080:8080"
+    environment:
+      LOG_LEVEL: "DEBUG"
+    volumes:
+      - $PWD/.env:/usr/app/.env
+    healthcheck:
+      test: curl -X GET "http://0.0.0.0:8080/health" || exit 1
+      interval: 1m
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped

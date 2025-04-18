@@ -5,6 +5,12 @@
 
 A minimal FastAPI blueprint to start a project from scratch.
 
+Application Features:
+ - ⚙️ Configurable with BaseSettings of Pydantic
+ - 📄 Structured Logging
+ - 🔒 API endpoints secured with API key authentication
+ - 🛡️ Centralized error handling with custom exceptions and detailed logging
+
 Repo Features:
  - 🛠️ configuration in a single file pyproject.toml
  - 📦 uv as package manager
@@ -13,12 +19,6 @@ Repo Features:
  - 🧹 Makefile
  - 🐳 Optimized and secure Docker Image
  - 🚀 Docker compose configuration for local development
-
-Application Features:
- - ⚙️ Configurable with BaseSettings of Pydantic
- - 📄 Structured Logging
- - 🔒 API endpoints secured with API key authentication
- - 🛡️ Centralized error handling with custom exceptions and detailed logging
 
 ## Table of contents
 

@@ -29,7 +29,7 @@ async def read_users():
     dependencies=[Depends(api_key_auth)],
 )
 async def read_user_me():
-    return User(name="Fra")
+    return User(name="Umberto")
 
 
 @router.get(

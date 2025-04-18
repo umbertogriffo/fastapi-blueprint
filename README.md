@@ -77,6 +77,7 @@ curl -X GET \
 ```shell
 curl -X GET \
   "http://127.0.0.1:8080/users/" \
+  -H 'Authorization: your-secret-api-key-here' \
   | jq '.'
 ```
 

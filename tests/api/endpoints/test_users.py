@@ -22,7 +22,7 @@ def test_read_user_me(client: TestClient):
     )
     assert response.status_code == status.HTTP_200_OK
     user = response.json()
-    assert user["name"] == "Fra"
+    assert user["name"] == "Umberto"
 
 
 def test_read_user(client: TestClient):

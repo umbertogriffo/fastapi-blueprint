@@ -63,6 +63,10 @@ To easily install the dependencies we created a make file.
     * Runs all tests.
     * Using [pytest](https://pypi.org/project/pytest/)
 
+### Environment
+
+Copy .𝐞𝐧𝐯.𝐞𝐱𝐚𝐦𝐩𝐥𝐞 → .𝐞𝐧𝐯 and fill it in.
+
 ### Run the application
 
 ```shell

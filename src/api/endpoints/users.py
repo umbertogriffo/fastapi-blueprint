@@ -1,6 +1,7 @@
 from typing import List
 
-from fastapi import APIRouter
+from api.deps import api_key_auth
+from fastapi import APIRouter, Depends
 from schemas import User
 from starlette import status
 
@@ -13,6 +14,7 @@ router = APIRouter()
     status_code=status.HTTP_200_OK,
     response_description="Returns a list of users",
     response_model=List[User],
+    dependencies=[Depends(api_key_auth)],
 )
 async def read_users():
     return [User(name="Rick"), User(name="Morty")]
@@ -24,6 +26,7 @@ async def read_users():
     status_code=status.HTTP_200_OK,
     response_description="Returns the current user",
     response_model=User,
+    dependencies=[Depends(api_key_auth)],
 )
 async def read_user_me():
     return User(name="Fra")
@@ -35,6 +38,7 @@ async def read_user_me():
     status_code=status.HTTP_200_OK,
     response_description="Returns the user with the specified name",
     response_model=User,
+    dependencies=[Depends(api_key_auth)],
 )
 async def read_user(name: str):
     return User(name=name)
@@ -46,6 +50,7 @@ async def read_user(name: str):
     status_code=status.HTTP_201_CREATED,
     response_description="Returns the created user",
     response_model=User,
+    dependencies=[Depends(api_key_auth)],
 )
 async def create_user(user: User):
     return user

@@ -18,6 +18,18 @@ Application Features:
  - 📄 Structured Logging
  - 🛡️ Shield — For secure and validated settings
 
+## Table of contents
+
+- [FastAPI Blueprint](#fastapi-blueprint)
+  - [Prerequisites](#prerequisites)
+    - [Install uv](#install-uv)
+  - [Bootstrap Environment](#bootstrap-environment)
+    - [How to use the make file](#how-to-use-the-make-file)
+    - [Run the application](#run-the-application)
+  - [Docker](#docker)
+  - [Example of requests](#example-of-requests)
+  - [Resources](#resources)
+
 ## Prerequisites
 
 * Python 3.10+
@@ -28,14 +40,29 @@ Application Features:
 Install `uv` with the official installer by following
 this [link](https://docs.astral.sh/uv/getting-started/installation/).
 
-## Installation
+## Bootstrap Environment
 
-To set it up and run:
-```shell
-uv sync
-```
+To easily install the dependencies we created a make file.
 
-Then:
+### How to use the make file
+
+> [!IMPORTANT]
+> Run `Setup` as your init command (or after `Clean`).
+
+* Check: ```make check```
+    * Use it to check that `which pip3` and `which python3` points to the right path.
+* Setup: ```make setup```
+    * Creates an environment and installs all dependencies.
+* Tidy up the code: ```make tidy```
+    * Run Ruff check and format.
+* Clean: ```make clean```
+    * Removes the environment and all cached files.
+* Test: ```make test```
+    * Runs all tests.
+    * Using [pytest](https://pypi.org/project/pytest/)
+
+### Run the application
+
 ```shell
 python app/main.py
 ```

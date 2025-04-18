@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -31,7 +32,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ADD pyproject.toml uv.lock src/ ./src/
 
 # Create a home directory for appuser and set HOME environment variable
-RUN mkdir -p /home/appuser/.aws && chown -R appuser:appuser /home/appuser
+RUN mkdir -p /home/appuser/.aws \
+    && chown -R appuser:appuser /home/appuser
 ENV HOME=/home/appuser
 
 # Change ownership of the working directory to the non-root user.

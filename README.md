@@ -10,13 +10,14 @@ Repo Features:
  - 📦 uv as package manager
  - 💅 ruff for linting and formatting
  - 🧪 pytest
- - 🧹 Makefile with code quality checks
+ - 🧹 Makefile
  - 🐳 Optimized and secure Docker Image
+ - 🚀 Docker compose configuration for local development
 
 Application Features:
  - ⚙️ Configurable with BaseSettings of Pydantic
  - 📄 Structured Logging
- - 🛡️ Shield — For secure and validated settings
+ - 🔒 API endpoints secured with API key authentication
 
 ## Table of contents
 

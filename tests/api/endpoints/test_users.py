@@ -58,3 +58,37 @@ def test_create_user_invalid_data(client: TestClient):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     error = response.json()
     assert "name" in error["detail"][0]
+
+
+def test_create_user_with_check_success(client: TestClient):
+    user_data = {"name": "ValidUser"}
+    response = client.post(
+        url="/users/check",
+        headers={"Authorization": settings.API_KEY.get_secret_value()},
+        json=user_data,
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+    user = response.json()
+    assert user["name"] == user_data["name"]
+
+
+def test_create_user_with_check_reserved_name(client: TestClient):
+    user_data = {"name": "admin"}
+    response = client.post(
+        url="/users/check",
+        headers={"Authorization": settings.API_KEY.get_secret_value()},
+        json=user_data,
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    error = response.json()
+    assert "Username 'admin' is reserved" in error["detail"]
+
+
+def test_create_user_with_check_invalid_data(client: TestClient):
+    user_data = {"name": ""}
+    response = client.post(
+        url="/users/check",
+        headers={"Authorization": settings.API_KEY.get_secret_value()},
+        json=user_data,
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

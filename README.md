@@ -18,6 +18,7 @@ Application Features:
  - ⚙️ Configurable with BaseSettings of Pydantic
  - 📄 Structured Logging
  - 🔒 API endpoints secured with API key authentication
+ - 🛡️ Centralized error handling with custom exceptions and detailed logging
 
 ## Table of contents
 
@@ -109,6 +110,23 @@ curl -X GET \
   | jq '.'
 ```
 
+```shell
+curl -X GET \
+  "http://127.0.0.1:8080/users/me" \
+  -H 'Authorization: your-secret-api-key-here' \
+  | jq '.'
+```
+
+```shell
+curl -X POST \
+  "http://127.0.0.1:8080/users/check" \
+  -H 'Authorization: your-secret-api-key-here' \
+  -H 'Content-Type: application/json' \
+  -d '{"name": "admin"}' \
+  | jq '.'
+```
+
 ## Resources
 - [Using uv with FastAPI](https://docs.astral.sh/uv/guides/integration/fastapi/#using-uv-with-fastapi)
 - [Deployments Concepts](https://fastapi.tiangolo.com/deployment/concepts/)
+- [How to secure APIs built with FastAPI: A complete guide](https://escape.tech/blog/how-to-secure-fastapi-api/)

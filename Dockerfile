@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev --compile-bytecode
 
 # Copy the application into the container
-ADD pyproject.toml uv.lock src/ ./src/
+COPY pyproject.toml uv.lock src/ ./src/
 
 # Create a home directory for appuser and set HOME environment variable
 RUN mkdir -p /home/appuser/.aws \

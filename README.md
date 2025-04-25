@@ -75,6 +75,9 @@ python app/main.py
 
 ## Docker
 
+> [!NOTE]
+> Dockerfile contains a multi-stage build that uses `--compile-bytecode` to compile the packages.
+
 Build the Docker image with:
 ```
 docker build --no-cache -t fastapi-app:latest .

@@ -17,7 +17,7 @@ Repo Features:
  - 💅 ruff for linting and formatting
  - 🧪 pytest
  - 🧹 Makefile
- - 🐳 Optimized and secure Docker Image (~150MB)
+ - 🐳 Optimized and secure Docker Image (~107MB)
  - 🚀 Docker compose configuration for local development
 
 ## Table of contents

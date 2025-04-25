@@ -24,11 +24,14 @@ COPY pyproject.toml uv.lock src/ /usr/app/src/
 FROM python:3.10-alpine
 
 # Set environment variables
-ENV LOGLEVEL="INFO"
-# Ensures that python compiler does not create .pyc file for the python source files within your production environment.
-ENV PYTHONDONTWRITEBYTECODE 1
-# Enables the python interpreter to immediately write out logs and outputs to the console.
-ENV PYTHONUNBUFFERED 1
+# PYTHONDONTWRITEBYTECODE - Ensures that python compiler does not create .pyc file for the python source files within your production environment.
+# PYTHONUNBUFFERED - Enables the python interpreter to immediately write out logs and outputs to the console.
+# Configure PATH for executables, packages are in the /usr/app/.venv folder
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    LOGLEVEL="INFO" \
+    PATH="/usr/app/.venv/bin:$PATH" \
+    HOME="/home/appuser"
 
 # Create a non-root user and group to improve the security of the container by
 # isolating processes from the host system, mitigating privilege escalation risks,
@@ -36,25 +39,20 @@ ENV PYTHONUNBUFFERED 1
 RUN addgroup --system appuser && adduser --system appuser --ingroup appuser
 
 # Install curl for health checks and other dependencies
-RUN apk add --no-cache curl libgcc libstdc++ gcompat
+RUN apk add --no-cache curl libgcc libstdc++ gcompat && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the installed environment from builder
+# Change ownership of the working directory to the non-root user.
+# This ensures that the default user within the container running the app is non root user.
 COPY --from=builder --chown=appuser:appuser /usr/app/ /usr/app/
 
 # Set working directory
 WORKDIR /usr/app/
 
-# Configure PATH for executables, packages are in the /usr/app/.venv folder
-ENV PATH="/usr/app/.venv/bin:$PATH"
-
 # Create a home directory for appuser and set HOME environment variable
 RUN mkdir -p /home/appuser/.aws \
     && chown -R appuser:appuser /home/appuser
-ENV HOME=/home/appuser
-
-# Change ownership of the working directory to the non-root user.
-# This ensures that the default user within the container running the app is non root user.
-RUN chown -R appuser:appuser /usr/app/
 
 # Switch to the non-root user
 USER appuser

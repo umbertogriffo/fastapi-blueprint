@@ -8,12 +8,20 @@ on:
       - "src/**"
       - "tests/**"
       - ".github/workflows/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "!.gitignore"
+      - "!README.md"
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths:
       - "src/**"
       - "tests/**"
       - ".github/workflows/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "!.gitignore"
+      - "!README.md"
 
 jobs:
   test:
@@ -42,5 +50,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
+        env:
+          API_KEY: TEST
         run: |
-          uv run pytest --durations=5 --log-cli-level=DEBUG --capture=tee-sys -v
+          uv run pytest -s --durations=5 --log-cli-level=INFO --capture=tee-sys -v

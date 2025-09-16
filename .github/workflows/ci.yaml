@@ -50,5 +50,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
+        env:
+          API_KEY: TEST
         run: |
           uv run pytest --durations=5 --log-cli-level=DEBUG --capture=tee-sys -v

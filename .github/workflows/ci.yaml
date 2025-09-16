@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/**"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.6'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+
+          version: "0.8.17"
+          enable-cache: true
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run tests
+        run: |
+          uv run pytest --durations=5 --log-cli-level=DEBUG --capture=tee-sys -v

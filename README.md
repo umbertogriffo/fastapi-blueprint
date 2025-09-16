@@ -35,7 +35,7 @@ Repo Features:
 ## Prerequisites
 
 * Python 3.10+
-* uv 0.6.10+
+* uv 0.8.17+
 
 ### Install uv
 

@@ -53,4 +53,4 @@ jobs:
         env:
           API_KEY: TEST
         run: |
-          uv run pytest --durations=5 --log-cli-level=DEBUG --capture=tee-sys -v
+          uv run pytest -s --durations=5 --log-cli-level=INFO --capture=tee-sys -v

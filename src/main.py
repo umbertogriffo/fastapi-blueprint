@@ -45,5 +45,5 @@ if __name__ == "__main__":
         host=settings.HOST,
         port=settings.PORT,
         log_config=None,
-        workers=os.cpu_count() - 1,
+        workers=max(1, os.cpu_count() - 1),
     )

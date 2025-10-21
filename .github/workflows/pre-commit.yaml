@@ -11,7 +11,6 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.ref }}
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
 
     - uses: actions/setup-python@v5
       with:
@@ -19,8 +18,8 @@ jobs:
 
     - name: Changed files
       id: changed_files
-      uses: jitterbit/get-changed-files@v1
+      uses: tj-actions/changed-files@v44
 
     - uses: pre-commit/action@v3.0.1
       with:
-        extra_args: --files ${{ steps.changed_files.outputs.all }}
+        extra_args: --files ${{ steps.changed_files.outputs.all_changed_files }}

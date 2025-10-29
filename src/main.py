@@ -15,6 +15,10 @@ from pydantic import ValidationError
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_whatever()
+    # If you need to initialize resources on startup, do it here.
+    # It may be stored in app state object:
+    # app.state.some_resource = SomeResource()
+    # https://github.com/fastapi/fastapi/discussions/13029
     yield
 
 

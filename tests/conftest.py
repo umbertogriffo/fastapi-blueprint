@@ -11,5 +11,5 @@ def data_folder_path():
 
 
 @pytest.fixture
-def client(monkeypatch) -> TestClient:
+def client() -> TestClient:
     return TestClient(app)

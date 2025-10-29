@@ -21,7 +21,7 @@ async def validation_exception_handler(request: Request, exc):
     Returns:
         A JSON response with the error code and message.
     """
-    exc_json = jsonable_encoder({"detail": exc.errors(), "body": exc.body})
+    exc_json = jsonable_encoder({"detail": exc.errors()})
 
     response = {"detail": []}
     for error in exc_json["detail"]:

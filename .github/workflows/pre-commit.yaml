@@ -20,6 +20,12 @@ jobs:
       with:
           python-version: '3.10'
 
+    - name: check if branch is ahead of main
+      run: |
+        if ! git merge-base --is-ancestor origin/main ${{ github.event.pull_request.head.sha }};
+        then echo "This branch is not up to date with main";
+        exit 1; fi
+
     - name: Changed files
       id: changed_files
       uses: tj-actions/changed-files@v44

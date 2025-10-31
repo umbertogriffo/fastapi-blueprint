@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from src.main import app
+from main import app
 
 
 def main():

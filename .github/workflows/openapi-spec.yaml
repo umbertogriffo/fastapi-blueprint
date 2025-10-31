@@ -4,13 +4,17 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened, ready_for_review ]
     branches:
-      - master
+      - main
     paths:
       - "src/api/**"
-      - "src/schemas"
+      - "src/schemas.py"
       - ".github/workflows/openapi-spec.yml"
 jobs:
   generate-openapi:
+    permissions:
+      contents: read
+      pull-requests: write
+
     runs-on: ubuntu-latest
     env:
       ENV_FILE: .env
@@ -45,7 +49,7 @@ jobs:
 
       - name: Generate OpenAPI spec
         run: |
-          uv run python tools/generate_openapi.py
+          PYTHONPATH=src uv run python scripts/generate_openapi.py
 
       - name: Upload OpenAPI spec as artifact
         uses: actions/upload-artifact@v4
@@ -72,8 +76,8 @@ jobs:
           git checkout origin/${{ github.base_ref }}
           # TODO: the script is not on master yet, so we generate the spec directly here.
           # Once the script is merged, we can use it here as well.
-          uv run python -c "
-          from surgical_guide_service.main import app
+          PYTHONPATH=src uv run python -c "
+          from main import app
           import json
           with open('openapi.json', 'w') as f:
               json.dump(app.openapi(), f, indent=2)
@@ -84,7 +88,7 @@ jobs:
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
-          uv run python tools/generate_openapi.py
+          PYTHONPATH=src uv run python scripts/generate_openapi.py
 
       - name: Generate diff
         run: |

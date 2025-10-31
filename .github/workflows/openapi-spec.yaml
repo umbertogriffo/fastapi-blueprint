@@ -1,0 +1,107 @@
+name: Generate OpenAPI Spec and Diff
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, ready_for_review ]
+    branches:
+      - master
+    paths:
+      - "src/api/**"
+      - "src/schemas"
+      - ".github/workflows/openapi-spec.yml"
+jobs:
+  generate-openapi:
+    runs-on: ubuntu-latest
+    env:
+      ENV_FILE: .env
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.8.17"
+          enable-cache: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.6'
+
+      - name: Install the project
+        run: uv sync --locked --dev
+
+      - name: Setup ENV file
+        run: cp .env.example .env
+        shell: bash
+
+      - name: Export environment variables
+        run: |
+          set -a
+          source .env
+          set +a
+          env | grep -v '^_' >> $GITHUB_ENV
+
+      - name: Generate OpenAPI spec
+        run: |
+          uv run python tools/generate_openapi.py
+
+      - name: Upload OpenAPI spec as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-spec
+          path: openapi.json
+
+      - name: Comment PR with spec
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const spec = fs.readFileSync('openapi.json', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📋 OpenAPI Specification\n\n<details>\n<summary>Click to expand</summary>\n\n\`\`\`json\n${spec}\n\`\`\`\n\n</details>`
+            });
+
+      - name: Generate base spec
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          git checkout origin/${{ github.base_ref }}
+          # TODO: the script is not on master yet, so we generate the spec directly here.
+          # Once the script is merged, we can use it here as well.
+          uv run python -c "
+          from surgical_guide_service.main import app
+          import json
+          with open('openapi.json', 'w') as f:
+              json.dump(app.openapi(), f, indent=2)
+          "
+          mv openapi.json openapi-base.json
+
+      - name: Generate PR spec
+        run: |
+          git fetch
+          git checkout ${{ github.head_ref }}
+          uv run python tools/generate_openapi.py
+
+      - name: Generate diff
+        run: |
+          diff -u openapi-base.json openapi.json > openapi-diff.txt || true
+
+      - name: Comment PR with diff
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const diff = fs.readFileSync('openapi-diff.txt', 'utf8');
+            const body = diff.trim()
+              ? `## 📊 OpenAPI Spec Changes\n\n\`\`\`diff\n${diff}\n\`\`\``
+              : `## 📊 OpenAPI Spec Changes\n\nNo changes detected in the OpenAPI specification.`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

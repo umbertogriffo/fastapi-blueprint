@@ -11,6 +11,10 @@ on:
       - ".github/workflows/openapi-spec.yml"
 jobs:
   generate-openapi:
+    permissions:
+      contents: read
+      pull-requests: write
+
     runs-on: ubuntu-latest
     env:
       ENV_FILE: .env

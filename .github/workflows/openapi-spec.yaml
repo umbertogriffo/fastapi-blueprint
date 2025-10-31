@@ -45,7 +45,7 @@ jobs:
 
       - name: Generate OpenAPI spec
         run: |
-          uv run python tools/generate_openapi.py
+          uv run python scripts/generate_openapi.py
 
       - name: Upload OpenAPI spec as artifact
         uses: actions/upload-artifact@v4
@@ -84,7 +84,7 @@ jobs:
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
-          uv run python tools/generate_openapi.py
+          uv run python scripts/generate_openapi.py
 
       - name: Generate diff
         run: |

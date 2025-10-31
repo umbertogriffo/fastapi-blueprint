@@ -7,7 +7,7 @@ on:
       - master
     paths:
       - "src/api/**"
-      - "src/schemas"
+      - "src/schemas.py"
       - ".github/workflows/openapi-spec.yml"
 jobs:
   generate-openapi:

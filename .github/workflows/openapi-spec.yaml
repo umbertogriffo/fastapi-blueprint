@@ -77,7 +77,7 @@ jobs:
           # TODO: the script is not on master yet, so we generate the spec directly here.
           # Once the script is merged, we can use it here as well.
           PYTHONPATH=src uv run python -c "
-          from surgical_guide_service.main import app
+          from main import app
           import json
           with open('openapi.json', 'w') as f:
               json.dump(app.openapi(), f, indent=2)

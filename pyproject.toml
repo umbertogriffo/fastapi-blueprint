@@ -9,13 +9,15 @@ dependencies = [
     "uvicorn==0.38.0",
     "pydantic-settings==2.12.0",
     "sqlmodel~=0.0.27",
+    "alembic>=1.17.2,<2.0.0",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=8.3.4",
     "ruff>=0.8.4",
-    "pre-commit~=4.2.0"
+    "pre-commit~=4.2.0",
+    "fire>=0.7.1",
 ]
 
 [tool.pytest.ini_options]
@@ -23,3 +25,9 @@ pythonpath = [
     "src",
     "tests"
 ]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+migrate-db = "migration_cli:main"

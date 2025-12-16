@@ -70,7 +70,11 @@ Copy .𝐞𝐧𝐯.𝐞𝐱𝐚𝐦𝐩𝐥𝐞 → .𝐞𝐧𝐯 and fill it in
 ### Run the application
 
 ```shell
-python app/main.py
+cd src
+# Set up the database schema (Optional, if using database)
+migrate-db migrate
+# Run the application
+python main.py
 ```
 
 ## Docker
@@ -102,6 +106,33 @@ To stop it:
 ```commandline
 docker compose down
 ```
+
+## Database Setup (Optional, if using database)
+
+The blueprint uses SQLModel (SQLAlchemy) with support for SQLite.
+
+### Perform migrations
+
+```bash
+# Set up the database schema
+cd src
+migrate-db
+# or directly with alembic
+uv run alembic --config alembic.ini upgrade head
+```
+
+The code migrate-db can be found in [migration_cli.py](src/migration_cli.py)
+
+### Generate migrations
+
+To generate new migration after adding fields to [SQLModel](src/models.py):
+
+```bash
+cd src
+uv run alembic --config alembic.ini revision --autogenerate -m "your text"
+```
+
+Has to be thoroughly tested, e.g adding a non-nullable column will not be flagged by Alembic!!
 
 ## Example of requests
 
@@ -137,3 +168,4 @@ curl -X POST \
 - [Using uv with FastAPI](https://docs.astral.sh/uv/guides/integration/fastapi/#using-uv-with-fastapi)
 - [Deployments Concepts](https://fastapi.tiangolo.com/deployment/concepts/)
 - [How to secure APIs built with FastAPI: A complete guide](https://escape.tech/blog/how-to-secure-fastapi-api/)
+- [Alembic](https://alembic.sqlalchemy.org/en/latest/front.html#installation)

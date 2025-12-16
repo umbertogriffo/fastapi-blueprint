@@ -10,6 +10,7 @@ Application Features:
  - 📄 Structured Logging
  - 🔒 API endpoints secured with API key authentication
  - 🛡️ Centralized error handling with custom exceptions and detailed logging
+ - 💾 SQLite as the SQL database (Optional).
 
 Repo Features:
  - 🛠️ configuration in a single file pyproject.toml
@@ -19,6 +20,7 @@ Repo Features:
  - 🧹 Makefile
  - 🐳 Optimized and secure Docker Image (~107MB)
  - 🚀 Docker compose configuration for local development
+ - 🏭 CI (continuous integration) based on GitHub Actions
 
 ## Table of contents
 

@@ -42,6 +42,18 @@ class InvalidValue(BackendException):
     http_status_code: int = status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
+class DatabaseException(BackendException): ...
+
+
+class DatabaseEntryNotFound(DatabaseException):
+    """
+    Raised when a database entry is not found.
+    """
+
+    default_message = "The requested database entry was not found"
+    http_status_code: int = status.HTTP_404_NOT_FOUND
+
+
 # Dictionary of errors that we want to propagate and expose to the API users
 ERRORS = {
     ValueRequired: ErrorContent(
@@ -49,6 +61,10 @@ ERRORS = {
     ),
     InvalidValue: ErrorContent(
         InvalidValue.default_message, InvalidValue.http_status_code
+    ),
+    DatabaseEntryNotFound: ErrorContent(
+        DatabaseEntryNotFound.default_message,
+        DatabaseEntryNotFound.http_status_code,
     ),
 }
 

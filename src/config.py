@@ -29,9 +29,13 @@ class Settings(BaseSettings):
         f"http://localhost:{PORT}",
     ]
 
+    # Database Configuration
+    DATABASE_URL: str = "sqlite:///database.db"
+
     # Logging Configuration
     LOG_LEVEL: str = "INFO"
     LOG_SAVE_ON_FILE: bool = False
+    LOG_DATABASE_QUERIES: bool = False
 
     # Authentication and Authorization
     API_KEY: SecretStr

@@ -1,6 +1,9 @@
 from config import settings
-from sqlalchemy import Engine
+from sqlalchemy import Engine, text
 from sqlmodel import SQLModel, create_engine
+from utils.log import get_logger
+
+logger = get_logger()
 
 
 def create_db_engine(verbose: bool = False, **kwargs):
@@ -28,6 +31,39 @@ def create_db_engine(verbose: bool = False, **kwargs):
         },
     )
     return engine
+
+
+def check_health(engine: Engine) -> None:
+    """
+    Perform a health check on the database by executing a simple query.
+
+    Args:
+        engine (Engine): The SQLAlchemy engine instance used to connect to the database.
+
+    Raises:
+        Exception: If the database health check fails, the exception is logged and re-raised.
+    """
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        raise
+
+
+def check_health_safe(engine: Engine) -> bool:
+    """
+    Safe version of check_health that returns a bool instead of raising for convenience.
+
+    Returns:
+        True if the database is healthy and permissions are valid, False otherwise.
+    """
+    try:
+        check_health(engine)
+        return True
+    except Exception:
+        return False
 
 
 def create_db_and_tables(engine: Engine):

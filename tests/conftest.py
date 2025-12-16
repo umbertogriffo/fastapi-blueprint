@@ -17,7 +17,10 @@ def data_folder_path():
 
 @pytest.fixture(name="session")
 def session_fixture() -> Session:
-    """Create an engine with all migrations applied."""
+    """Create a new database session for a test."""
+    # TODO: Use an in-memory SQLite database for faster tests if possible.
+    #       https://sqlmodel.tiangolo.com/tutorial/fastapi/tests/#memory-database
+
     # Create a temporary database file
     fd, path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
@@ -45,6 +48,8 @@ def session_fixture() -> Session:
 
 @pytest.fixture(name="client_with_db")
 def client_fixture(session: Session):
+    """Create a TestClient that uses the test database session."""
+
     def get_session_override():
         return session
 

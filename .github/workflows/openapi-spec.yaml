@@ -1,15 +1,17 @@
 name: Generate OpenAPI Spec and Diff
 
 on:
-  pull_request:
-    types: [ labeled ]
+  push:
     branches:
-      - main
+      - "main"
     paths:
       - "src/api/**"
       - "src/schemas.py"
       - "src/models.py"
       - ".github/workflows/openapi-spec.yml"
+  pull_request:
+    types: [ labeled ]
+
 jobs:
   generate-openapi:
     permissions:

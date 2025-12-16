@@ -16,10 +16,17 @@ def create_db_engine(verbose: bool = False, **kwargs):
     Returns:
         engine: The SQLAlchemy engine instance.
     """
+    database_type = (
+        "postgresql" if settings.DATABASE_URL.startswith("postgresql") else "sqlite"
+    )
+    logger.info(f"Initialized a {database_type} database engine.")
+
+    connect_args = {}
     # Using check_same_thread=False allows FastAPI to use the same SQLite database in different threads.
-    connect_args = {
-        "check_same_thread": False,
-    }
+    # This is necessary only when using SQLite.
+    if database_type == "sqlite":
+        connect_args["check_same_thread"] = False
+
     engine = create_engine(
         settings.DATABASE_URL,
         connect_args=connect_args,

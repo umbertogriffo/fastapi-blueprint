@@ -10,7 +10,7 @@ Application Features:
  - 📄 Structured Logging
  - 🔒 API endpoints secured with API key authentication
  - 🛡️ Centralized error handling with custom exceptions and detailed logging
- - 💾 SQLite as the SQL database (Optional).
+ - 💾 (Optional) SQLite (Default) or PostgreSQL as the SQL database.
 
 Repo Features:
  - 🛠️ configuration in a single file pyproject.toml
@@ -24,15 +24,18 @@ Repo Features:
 
 ## Table of contents
 
-- [FastAPI Blueprint](#fastapi-blueprint)
-  - [Prerequisites](#prerequisites)
-    - [Install uv](#install-uv)
-  - [Bootstrap Environment](#bootstrap-environment)
-    - [How to use the make file](#how-to-use-the-make-file)
-    - [Run the application](#run-the-application)
-  - [Docker](#docker)
-  - [Example of requests](#example-of-requests)
-  - [Resources](#resources)
+- [Prerequisites](#prerequisites)
+  - [Install uv](#install-uv)
+- [Bootstrap Environment](#bootstrap-environment)
+  - [How to use the make file](#how-to-use-the-make-file)
+  - [Environment](#environment)
+  - [Run the application](#run-the-application)
+- [Docker](#docker)
+- [Database Setup (Optional, if using database)](#database-setup-optional-if-using-database)
+  - [Perform migrations](#perform-migrations)
+  - [Generate migrations](#generate-migrations)
+- [Example of requests](#example-of-requests)
+- [Resources](#resources)
 
 ## Prerequisites
 
@@ -71,10 +74,16 @@ Copy .𝐞𝐧𝐯.𝐞𝐱𝐚𝐦𝐩𝐥𝐞 → .𝐞𝐧𝐯 and fill it in
 
 ### Run the application
 
+> [!NOTE]
+> To run it with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` in .𝐞𝐧𝐯, otherwise it will use SQLite by default.
+> Also, you will need to run a PostgreSQL instance locally by running the docker compose.
+
+Using SQLite (Default):
+
 ```shell
 cd src
-# Set up the database schema (Optional, if using database)
-migrate-db migrate
+# Set up the database (only if using database)
+migrate-db
 # Run the application
 python main.py
 ```
@@ -111,9 +120,15 @@ docker compose down
 
 ## Database Setup (Optional, if using database)
 
-The blueprint uses SQLModel (SQLAlchemy) with support for SQLite.
+The blueprint uses SQLModel (SQLAlchemy) with support for `SQLite` and `PostgreSQL`.
 
 ### Perform migrations
+
+> [!NOTE]
+> To run it with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` in .𝐞𝐧𝐯, otherwise it will use SQLite by default.
+> Also, you will need to run a PostgreSQL instance locally by running the docker compose.
+
+Using `SQLite` (Default):
 
 ```bash
 # Set up the database schema

@@ -3,7 +3,6 @@
 import sys
 from pathlib import Path
 
-import fire
 from alembic import command
 from alembic.config import Config
 from config import settings
@@ -33,4 +32,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(fire.Fire(main))
+    sys.exit(main())

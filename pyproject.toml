@@ -31,3 +31,4 @@ package = true
 
 [project.scripts]
 migrate-db = "migration_cli:main"
+dc = "docker_compose_cli:main"

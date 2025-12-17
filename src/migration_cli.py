@@ -17,7 +17,7 @@ def main():
 
     if not alembic_ini_path.exists():
         logger.error(f"Error: alembic.ini not found at {alembic_ini_path}")
-        return 1
+        sys.exit(1)
 
     logger.info(f"Running migrations from {alembic_ini_path}")
     try:
@@ -25,10 +25,10 @@ def main():
         config = Config(str(alembic_ini_path))
         config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
         command.upgrade(config, "head")
-        return 0
+        sys.exit(0)
     except Exception as e:
         logger.error(f"Error running migrations: {str(e)}")
-        return 1
+        sys.exit(1)
 
 
 if __name__ == "__main__":

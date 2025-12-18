@@ -4,6 +4,8 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
+![fast-api-blueprint-img.png](images/fast-api-blueprint-img.png)
+
 A minimal FastAPI blueprint to start a project from scratch.
 
 Application Features:

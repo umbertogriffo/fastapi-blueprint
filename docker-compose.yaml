@@ -27,7 +27,6 @@ services:
     restart: unless-stopped
     profiles:
       - all
-      - app
 
   db:
     image: public.ecr.aws/docker/library/postgres
@@ -48,16 +47,16 @@ services:
     profiles:
       - all
       - db
-      - dependencies
 
   migration:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: migration-runner
-    command: python src/migration_cli.py
+    command: python src/utils/cli/migration.py
     environment:
       LOG_LEVEL: "DEBUG"
+      PYTHONPATH: /usr/app/src
     volumes:
       - $PWD/.env:/usr/app/.env
     depends_on:
@@ -68,7 +67,7 @@ services:
     restart: "no"
     profiles:
       - all
-      - dependencies
+      - db
 
 networks:
   service-network:

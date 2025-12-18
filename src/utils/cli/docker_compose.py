@@ -4,7 +4,6 @@ import subprocess
 import sys
 
 PROFILES = {
-    "deps": "dependencies",
     "db": "db",
     "all": "all",
 }
@@ -12,12 +11,12 @@ PROFILES = {
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: dc [deps|db|all] [compose-args...]")
+        print("Usage: dc [db|all] [compose-args...]")
         sys.exit(1)
 
     mode = sys.argv[1]
     if mode not in PROFILES:
-        print(f"Invalid mode '{mode}'. Use: deps, db, or all")
+        print(f"Invalid mode '{mode}'. Use: db or all")
         sys.exit(1)
 
     profile = PROFILES[mode]

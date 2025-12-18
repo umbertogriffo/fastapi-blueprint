@@ -30,5 +30,5 @@ pythonpath = [
 package = true
 
 [project.scripts]
-migrate-db = "migration_cli:main"
-dc = "docker_compose_cli:main"
+migrate-db = "utils.cli.migration:main"
+dc = "utils.cli.docker_compose:main"

@@ -13,7 +13,7 @@ logger = get_logger()
 
 def main():
     """Run alembic upgrade head to apply all migrations."""
-    alembic_ini_path = Path(__file__).parent / "alembic.ini"
+    alembic_ini_path = Path(__file__).parents[2] / "alembic.ini"
 
     if not alembic_ini_path.exists():
         logger.error(f"Error: alembic.ini not found at {alembic_ini_path}")

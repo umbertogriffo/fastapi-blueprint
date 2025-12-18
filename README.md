@@ -18,7 +18,7 @@ Repo Features:
  - 💅 ruff for linting and formatting
  - 🧪 pytest
  - 🧹 Makefile
- - 🐳 Optimized and secure Docker Image (~107MB)
+ - 🐳 Optimized and secure Docker Image (~150MB, ~107MB without PostgreSQL client libraries)
  - 🚀 Docker compose configuration for local development
  - 🏭 CI (continuous integration) based on GitHub Actions
 
@@ -107,8 +107,8 @@ dc db up
 python main.py
 ```
 
-The code `migrate-db` can be found in [migration_cli.py](src/migration_cli.py).
-The code `dc` can be found in [docker_compose_cli.py](src/docker_compose_cli.py).
+The code `migrate-db` can be found in [migration_cli.py](src/utils/migration_cli.py).
+The code `dc` can be found in [docker_compose_cli.py](src/utils/docker_compose_cli.py).
 
 ### Run the application with Docker Compose
 
@@ -126,13 +126,12 @@ dc
 
 With this CLI you can start the application in different modes, such as:
 
-- `all` which is the production mode, which starts the entire application stack
-- `deps` which only runs the required dependencies such as `PostgreSQL` locally, allowing you to run the service locally
 - `db` which only runs the `PostgreSQL` locally
+- `all` which starts the entire application stack
 
 For example, to start the entire application stack with building the images, run:
 
-```
+```bash
 dc all up --build -d
 ```
 

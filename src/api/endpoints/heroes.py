@@ -3,7 +3,7 @@ from typing import Annotated
 from api.deps import SessionDep, get_db_session
 from excepts import DatabaseEntryNotFound, get_error_content
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from models import Hero, HeroCreate, HeroPublic, HeroUpdate
+from models import UUID7, Hero, HeroCreate, HeroPublic, HeroUpdate
 from sqlmodel import select
 from utils.log import get_logger
 
@@ -52,7 +52,7 @@ def read_heroes(
     response_model=HeroPublic,
     dependencies=[Depends(get_db_session)],
 )
-def read_hero(hero_id: int, session: SessionDep):
+def read_hero(hero_id: UUID7, session: SessionDep):
     try:
         hero = session.get(Hero, hero_id)
         if not hero:
@@ -83,7 +83,7 @@ def read_hero(hero_id: int, session: SessionDep):
     response_model=HeroPublic,
     dependencies=[Depends(get_db_session)],
 )
-def update_hero(hero_id: int, hero: HeroUpdate, session: SessionDep):
+def update_hero(hero_id: UUID7, hero: HeroUpdate, session: SessionDep):
     try:
         hero_db = session.get(Hero, hero_id)
         if not hero_db:
@@ -118,7 +118,7 @@ def update_hero(hero_id: int, hero: HeroUpdate, session: SessionDep):
     response_description="Indicates whether the hero was successfully deleted",
     dependencies=[Depends(get_db_session)],
 )
-def delete_hero(hero_id: int, session: SessionDep):
+def delete_hero(hero_id: UUID7, session: SessionDep):
     try:
         hero = session.get(Hero, hero_id)
         if not hero:

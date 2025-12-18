@@ -114,7 +114,7 @@ The code `dc` can be found in [docker_compose_cli.py](src/utils/docker_compose_c
 
 > [!NOTE]
 > To run the service with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@db:5432/develop`
-> in .𝐞𝐧𝐯, setting db instead of localhost otherwise the service-api can't reach the database container.
+> in .𝐞𝐧𝐯, setting db instead of localhost otherwise the service-api and migration can't reach the database container.
 
 The `dc` CLI utility to run Docker Compose with specific profiles is available to start the application.
 

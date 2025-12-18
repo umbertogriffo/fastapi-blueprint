@@ -51,11 +51,11 @@ def test_read_heroes(session: Session, client_with_db: TestClient):
     assert data[0]["name"] == hero_1.name
     assert "secret_name" not in data[0].keys()
     assert data[0]["age"] == hero_1.age
-    assert data[0]["id"] == hero_1.id
+    assert data[0]["id"] == str(hero_1.id)
     assert data[1]["name"] == hero_2.name
     assert "secret_name" not in data[1].keys()
     assert data[1]["age"] == hero_2.age
-    assert data[1]["id"] == hero_2.id
+    assert data[1]["id"] == str(hero_2.id)
 
 
 def test_read_hero(session: Session, client_with_db: TestClient):
@@ -70,7 +70,7 @@ def test_read_hero(session: Session, client_with_db: TestClient):
     assert data["name"] == hero_1.name
     assert "secret_name" not in data.keys()
     assert data["age"] == hero_1.age
-    assert data["id"] == hero_1.id
+    assert data["id"] == str(hero_1.id)
 
 
 def test_update_hero(session: Session, client_with_db: TestClient):
@@ -85,7 +85,7 @@ def test_update_hero(session: Session, client_with_db: TestClient):
     assert data["name"] == "Deadpuddle"
     assert "secret_name" not in data.keys()
     assert data["age"] is None
-    assert data["id"] == hero_1.id
+    assert data["id"] == str(hero_1.id)
 
 
 def test_delete_hero(session: Session, client_with_db: TestClient):

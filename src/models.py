@@ -1,4 +1,47 @@
+from typing import Annotated, Literal
+
+import uuid_utils.compat as uuid
+from pydantic import GetPydanticSchema
+from pydantic_core import core_schema
 from sqlmodel import Field, SQLModel
+from uuid_utils.compat import UUID
+
+
+# TODO: Remove this function when Pydantic adds native support for UUID7
+#       https://github.com/pydantic/pydantic-extra-types/issues/204
+def validate_uuid(val, version: Literal[1, 3, 4, 5, 6, 7, 8]) -> UUID:
+    # Convert string to UUID if needed
+    if isinstance(val, str):
+        try:
+            val = UUID(val)
+        except (ValueError, AttributeError):
+            raise ValueError(f"Invalid UUID format: {val}")
+    if not isinstance(val, UUID):
+        raise ValueError(f"Expected a UUID, got {type(val)}")
+    if val.version != version:
+        raise ValueError(f"Expected a UUID{version}, got UUID{val.version}")
+    return val
+
+
+UUID7 = Annotated[
+    UUID,
+    GetPydanticSchema(
+        get_pydantic_core_schema=lambda _,
+        handler: core_schema.with_info_plain_validator_function(
+            lambda val, info: validate_uuid(
+                UUID(val) if info.mode == "json" else val, version=7
+            ),
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda val, info: str(val) if info.mode == "json" else val,
+                info_arg=True,
+            ),
+        ),
+        get_pydantic_json_schema=lambda _, handler: {
+            **handler(core_schema.str_schema()),
+            "format": "uuid7",
+        },
+    ),
+]
 
 
 class HeroBase(SQLModel):
@@ -13,8 +56,8 @@ class HeroBase(SQLModel):
 class Hero(HeroBase, table=True):
     """Database model for Hero with the extra fields that are not always in the other models."""
 
-    id: int | None = Field(
-        default=None,
+    id: UUID7 = Field(
+        default_factory=uuid.uuid7,
         title="Hero ID",
         description="The unique identifier for the hero.",
         primary_key=True,
@@ -27,7 +70,7 @@ class Hero(HeroBase, table=True):
 class HeroPublic(HeroBase):
     """Public model for Hero without sensitive information."""
 
-    id: int
+    id: UUID7
 
 
 class HeroCreate(HeroBase):

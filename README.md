@@ -86,7 +86,7 @@ If you want to use a `SQLite` backed database, make sure to set the `DATABASE_UR
 then run:
 ```shell
 # perform the SQLite migrations
-migrate-db
+cd src && migrate-db
 # or directly with alembic
 # uv run alembic --config src/alembic.ini upgrade head
 

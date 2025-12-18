@@ -20,11 +20,28 @@ router = APIRouter()
     dependencies=[Depends(get_db_session)],
 )
 def create_hero(hero: HeroCreate, session: SessionDep):
-    db_hero = Hero.model_validate(hero)
-    session.add(db_hero)
-    session.commit()
-    session.refresh(db_hero)
-    return db_hero
+    try:
+        db_hero = Hero.model_validate(hero)
+        session.add(db_hero)
+        session.commit()
+        session.refresh(db_hero)
+        return db_hero
+    except Exception as e:
+        error = get_error_content(e)
+        error_message = error.message
+
+        logger.error(
+            error_message,
+            exc_info=True,
+            stack_info=True,
+        )
+
+        session.rollback()
+
+        raise HTTPException(
+            status_code=error.http_status_code,
+            detail=error_message,
+        )
 
 
 @router.get(
@@ -58,7 +75,6 @@ def read_hero(hero_id: UUID7, session: SessionDep):
         if not hero:
             raise DatabaseEntryNotFound(f"Hero with ID {hero_id} not found")
         return hero
-
     except Exception as e:
         error = get_error_content(e)
         error_message = error.message
@@ -68,6 +84,8 @@ def read_hero(hero_id: UUID7, session: SessionDep):
             exc_info=True,
             stack_info=True,
         )
+
+        session.rollback()
 
         raise HTTPException(
             status_code=error.http_status_code,
@@ -94,7 +112,6 @@ def update_hero(hero_id: UUID7, hero: HeroUpdate, session: SessionDep):
         session.commit()
         session.refresh(hero_db)
         return hero_db
-
     except Exception as e:
         error = get_error_content(e)
         error_message = error.message
@@ -104,6 +121,8 @@ def update_hero(hero_id: UUID7, hero: HeroUpdate, session: SessionDep):
             exc_info=True,
             stack_info=True,
         )
+
+        session.rollback()
 
         raise HTTPException(
             status_code=error.http_status_code,
@@ -135,6 +154,8 @@ def delete_hero(hero_id: UUID7, session: SessionDep):
             exc_info=True,
             stack_info=True,
         )
+
+        session.rollback()
 
         raise HTTPException(
             status_code=error.http_status_code,

@@ -98,5 +98,23 @@ def test_delete_hero(session: Session, client_with_db: TestClient):
     hero_in_db = session.get(Hero, hero_1.id)
 
     assert response.status_code == 200
-
     assert hero_in_db is None
+
+
+def test_update_hero_rollback_on_error(
+    mocker, client_with_db: TestClient, session: Session
+):
+    """Test that updating a hero rolls back on commit error."""
+    hero = Hero(name="Deadpond", secret_name="Dive Wilson")
+    session.add(hero)
+    session.commit()
+
+    with mocker.patch.object(session, "commit", side_effect=Exception("Commit failed")):
+        response = client_with_db.patch(f"/heroes/{hero.id}", json={"name": "NewName"})
+
+        assert "Commit failed" in response.text
+        assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+
+        # Verify hero wasn't updated
+        session.refresh(hero)
+        assert hero.name == "Deadpond"

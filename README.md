@@ -30,10 +30,9 @@ Repo Features:
   - [How to use the make file](#how-to-use-the-make-file)
   - [Environment](#environment)
   - [Run the application](#run-the-application)
+  - [Run the application with Docker Compose](#run-the-application-with-docker-compose)
 - [Docker](#docker)
-- [Database Setup (Optional, if using database)](#database-setup-optional-if-using-database)
-  - [Perform migrations](#perform-migrations)
-  - [Generate migrations](#generate-migrations)
+- [Generate Database Migrations](#generate-database-migrations)
 - [Example of requests](#example-of-requests)
 - [Resources](#resources)
 
@@ -74,18 +73,88 @@ Copy .𝐞𝐧𝐯.𝐞𝐱𝐚𝐦𝐩𝐥𝐞 → .𝐞𝐧𝐯 and fill it in
 
 ### Run the application
 
-> [!NOTE]
-> To run it with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` in .𝐞𝐧𝐯, otherwise it will use SQLite by default.
-> Also, you will need to run a PostgreSQL instance locally by running the docker compose.
-
-Using SQLite (Default):
-
 ```shell
 cd src
-# Set up the database (only if using database)
-migrate-db
 # Run the application
 python main.py
+```
+
+The blueprint also gives the possibility to use `SQLModel` (SQLAlchemy) with support for `SQLite` and `PostgreSQL`.
+
+If you want to use a `SQLite` backed database, make sure to set the `DATABASE_URL=sqlite:///database.db` variable in the .𝐞𝐧𝐯 file.
+
+then run:
+```shell
+cd src
+# perform the SQLite migrations
+migrate-db
+# or directly with alembic
+# uv run alembic --config alembic.ini upgrade head
+
+# Run the application
+python main.py
+```
+
+While if you want to use a `PostgreSQL` backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` variable in the .𝐞𝐧𝐯 file.
+
+then run:
+```shell
+cd src
+# Let's spin up a Postgres instance with the migrated dataset with Docker Compose
+dc db up
+
+# Run the application
+python main.py
+```
+
+The code `migrate-db` can be found in [migration_cli.py](src/migration_cli.py).
+The code `dc` can be found in [docker_compose_cli.py](src/docker_compose_cli.py).
+
+### Run the application with Docker Compose
+
+> [!NOTE]
+> To run the service with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@db:5432/develop`
+> in .𝐞𝐧𝐯, setting db instead of localhost otherwise the service-api can't reach the database container.
+
+The `dc` CLI utility to run Docker Compose with specific profiles is available to start the application.
+
+Run the following command for more information:
+
+```bash
+dc
+```
+
+With this CLI you can start the application in different modes, such as:
+
+- `all` which is the production mode, which starts the entire application stack
+- `deps` which only runs the required dependencies such as `PostgreSQL` locally, allowing you to run the service locally
+- `db` which only runs the `PostgreSQL` locally
+
+For example, to start the entire application stack with building the images, run:
+
+```
+dc all up --build -d
+```
+
+To stop the application and remove the containers, run
+
+```bash
+dc all down
+```
+
+You can also skip the CLI util and run the service containers by calling the following command from within the project folder:
+```commandline
+docker compose up -d --build
+```
+> [!NOTE]
+> or for docker version < 20.10.0:
+```commandline
+docker-compose up -d --build
+```
+
+To stop it:
+```commandline
+docker compose down
 ```
 
 ## Docker
@@ -103,44 +172,7 @@ Run the Docker container locally with:
 docker run --rm -p 8080:8080 -v $(pwd)/.env:/usr/app/.env fastapi-app:latest
 ```
 
-Run the service container by calling the following command from within the project folder:
-```commandline
-docker compose up -d --build
-```
-> [!NOTE]
-> or for docker version < 20.10.0:
-```commandline
-docker-compose up -d --build
-```
-
-To stop it:
-```commandline
-docker compose down
-```
-
-## Database Setup (Optional, if using database)
-
-The blueprint uses SQLModel (SQLAlchemy) with support for `SQLite` and `PostgreSQL`.
-
-### Perform migrations
-
-> [!NOTE]
-> To run it with PostgreSQL backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` in .𝐞𝐧𝐯, otherwise it will use SQLite by default.
-> Also, you will need to run a PostgreSQL instance locally by running the docker compose.
-
-Using `SQLite` (Default):
-
-```bash
-# Set up the database schema
-cd src
-migrate-db
-# or directly with alembic
-uv run alembic --config alembic.ini upgrade head
-```
-
-The code migrate-db can be found in [migration_cli.py](src/migration_cli.py)
-
-### Generate migrations
+## Generate Database Migrations
 
 To generate new migration after adding fields to [SQLModel](src/models.py):
 
@@ -148,8 +180,6 @@ To generate new migration after adding fields to [SQLModel](src/models.py):
 cd src
 uv run alembic --config alembic.ini revision --autogenerate -m "your text"
 ```
-
-Has to be thoroughly tested, e.g adding a non-nullable column will not be flagged by Alembic!!
 
 ## Example of requests
 

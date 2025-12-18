@@ -9,6 +9,8 @@ services:
       - "8080:8080"
     environment:
       LOG_LEVEL: "DEBUG"
+    env_file:
+      - .env  # This reads from host .env file
     volumes:
       - $PWD/.env:/usr/app/.env
     healthcheck:
@@ -57,8 +59,9 @@ services:
     environment:
       LOG_LEVEL: "DEBUG"
       PYTHONPATH: /usr/app/src
-    volumes:
-      - $PWD/.env:/usr/app/.env
+      DATABASE_URL: postgresql://develop:develop_secret@db:5432/develop # Override for migration
+    env_file:
+      - .env  # This reads from host .env file
     depends_on:
       db:
         condition: service_healthy

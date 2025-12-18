@@ -85,26 +85,23 @@ If you want to use a `SQLite` backed database, make sure to set the `DATABASE_UR
 
 then run:
 ```shell
-cd src
 # perform the SQLite migrations
 migrate-db
 # or directly with alembic
-# uv run alembic --config alembic.ini upgrade head
+# uv run alembic --config src/alembic.ini upgrade head
 
 # Run the application
-python main.py
+uv run python src/main.py
 ```
 
 While if you want to use a `PostgreSQL` backed database set `DATABASE_URL=postgresql://develop:develop_secret@localhost:5432/develop` variable in the .𝐞𝐧𝐯 file.
 
 then run:
 ```shell
-cd src
 # Let's spin up a Postgres instance with the migrated dataset with Docker Compose
-dc db up
-
+dc db up -d
 # Run the application
-python main.py
+uv run python src/main.py
 ```
 
 The code `migrate-db` can be found in [migration_cli.py](src/utils/migration_cli.py).
@@ -176,8 +173,7 @@ docker run --rm -p 8080:8080 -v $(pwd)/.env:/usr/app/.env fastapi-app:latest
 To generate new migration after adding fields to [SQLModel](src/models.py):
 
 ```bash
-cd src
-uv run alembic --config alembic.ini revision --autogenerate -m "your text"
+uv run alembic --config src/alembic.ini revision --autogenerate -m "your text"
 ```
 
 ## Example of requests

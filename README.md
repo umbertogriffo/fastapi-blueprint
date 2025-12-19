@@ -13,7 +13,7 @@ Application Features:
  - 📄 Structured Logging
  - 🔒 API endpoints secured with API key authentication
  - 🛡️ Centralized error handling with custom exceptions and detailed logging
- - 💾 (Optional) SQLite (Default) or PostgreSQL as the SQL database.
+ - 💾 SQLite (Default) or PostgreSQL as the SQL database.
 
 Repo Features:
  - 🛠️ configuration in a single file pyproject.toml
@@ -108,8 +108,8 @@ dc db up -d
 uv run python src/main.py
 ```
 
-The code `migrate-db` can be found in [migration_cli.py](src/utils/migration_cli.py).
-The code `dc` can be found in [docker_compose_cli.py](src/utils/docker_compose_cli.py).
+The code `migrate-db` can be found in [migration_cli.py](src/utils/cli/migration.py).
+The code `dc` can be found in [docker_compose_cli.py](src/utils/cli/docker_compose.py).
 
 ### Run the application with Docker Compose
 

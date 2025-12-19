@@ -43,6 +43,7 @@ Repo Features:
 
 * Python 3.10+
 * uv 0.8.17+
+* PoatgreSQL 18.1+ (if you want to use PostgreSQL as database)
 
 ### Install uv
 

@@ -76,6 +76,42 @@ def book_ticket_with_lock(
             print(f"❌ {customer_name}: Booking failed - {e}")
 
 
+def run_scenarios(
+    engine, ticket_id: int, target_function: callable, nowait: bool = False
+):
+    # Reset ticket
+    with Session(engine) as session:
+        ticket = session.get(Ticket, ticket_id)
+        ticket.status = TicketStatus.AVAILABLE
+        session.commit()
+
+    if nowait:
+        threads = [
+            threading.Thread(
+                target=target_function, args=(engine, ticket_id, "Alice", True)
+            ),
+            threading.Thread(
+                target=target_function, args=(engine, ticket_id, "Bob", True)
+            ),
+            threading.Thread(
+                target=target_function, args=(engine, ticket_id, "Charlie", True)
+            ),
+        ]
+    else:
+        threads = [
+            threading.Thread(target=target_function, args=(engine, ticket_id, "Alice")),
+            threading.Thread(target=target_function, args=(engine, ticket_id, "Bob")),
+            threading.Thread(
+                target=target_function, args=(engine, ticket_id, "Charlie")
+            ),
+        ]
+
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+
 def ticket_booking_demo():
     engine = create_engine("postgresql://develop:develop_secret@localhost:5432/develop")
     SQLModel.metadata.create_all(engine)
@@ -92,74 +128,18 @@ def ticket_booking_demo():
     print("Scenario 1: WITHOUT LOCK (Double Booking Risk)")
     print("=" * 60)
 
-    threads = [
-        threading.Thread(
-            target=book_ticket_without_lock, args=(engine, ticket_id, "Alice")
-        ),
-        threading.Thread(
-            target=book_ticket_without_lock, args=(engine, ticket_id, "Bob")
-        ),
-        threading.Thread(
-            target=book_ticket_without_lock, args=(engine, ticket_id, "Charlie")
-        ),
-    ]
-
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
+    run_scenarios(engine, ticket_id, book_ticket_without_lock)
 
     print("\n" + "=" * 60)
     print("Scenario 2: WITH LOCK (Safe Booking)")
     print("=" * 60)
 
-    # Reset ticket
-    with Session(engine) as session:
-        ticket = session.get(Ticket, ticket_id)
-        ticket.status = TicketStatus.AVAILABLE
-        session.commit()
-
-    threads = [
-        threading.Thread(
-            target=book_ticket_with_lock, args=(engine, ticket_id, "Alice")
-        ),
-        threading.Thread(target=book_ticket_with_lock, args=(engine, ticket_id, "Bob")),
-        threading.Thread(
-            target=book_ticket_with_lock, args=(engine, ticket_id, "Charlie")
-        ),
-    ]
-
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
+    run_scenarios(engine, ticket_id, book_ticket_with_lock)
 
     print("\n" + "=" * 60)
     print("Scenario 3: WITH NOWAIT (Fail Fast)")
     print("=" * 60)
-
-    # Reset ticket
-    with Session(engine) as session:
-        ticket = session.get(Ticket, ticket_id)
-        ticket.status = TicketStatus.AVAILABLE
-        session.commit()
-
-    threads = [
-        threading.Thread(
-            target=book_ticket_with_lock, args=(engine, ticket_id, "Alice", True)
-        ),
-        threading.Thread(
-            target=book_ticket_with_lock, args=(engine, ticket_id, "Bob", True)
-        ),
-        threading.Thread(
-            target=book_ticket_with_lock, args=(engine, ticket_id, "Charlie", True)
-        ),
-    ]
-
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
+    run_scenarios(engine, ticket_id, book_ticket_with_lock, nowait=True)
 
 
 if __name__ == "__main__":

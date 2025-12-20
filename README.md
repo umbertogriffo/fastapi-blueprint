@@ -4,7 +4,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-<p align="center"> ![fast-api-blueprint-img.png](images/fast-api-blueprint-img.png)</p>
+<p align="center"> <img src="https://github.com/umbertogriffo/fastapi-blueprint/blob/main/images/fast-api-blueprint-img.png" alt="FastAPI Blueprint" /></p>
 
 A minimal FastAPI blueprint to start a project from scratch.
 

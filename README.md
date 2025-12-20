@@ -1,17 +1,10 @@
 <p align="center"> <img src="https://github.com/umbertogriffo/fastapi-blueprint/blob/main/images/fast-api-blueprint-img.png" alt="FastAPI Blueprint" /></p>
 
+#
 
-<p align="center">
-  <a href="https://github.com/umbertogriffo/fastapi-blueprint/actions/workflows/ci.yaml">
-    <img src="https://github.com/umbertogriffo/fastapi-blueprint/workflows/CI/badge.svg" alt="CI">
-  </a>
-  <a href="https://github.com/pre-commit/pre-commit">
-    <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit" alt="pre-commit">
-  </a>
-  <a href="https://github.com/astral-sh/ruff">
-    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style: Ruff">
-  </a>
-</p>
+[![CI](https://github.com/umbertogriffo/fastapi-blueprint/workflows/CI/badge.svg)](https://github.com/umbertogriffo/fastapi-blueprint/actions/workflows/ci.yaml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 A minimal FastAPI blueprint to start a project from scratch.
 

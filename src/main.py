@@ -5,6 +5,7 @@ import uvicorn
 from api.exception_handlers import validation_exception_handler
 from api.router import router
 from config import init_whatever, settings
+from database import engine
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +21,8 @@ async def lifespan(app: FastAPI):
     # app.state.some_resource = SomeResource()
     # https://github.com/fastapi/fastapi/discussions/13029
     yield
+    # Clean up
+    engine.dispose()
 
 
 app = FastAPI(title=settings.SERVICE_NAME, version="0.1.0", lifespan=lifespan)

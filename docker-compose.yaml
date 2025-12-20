@@ -1,4 +1,5 @@
 services:
+
   service-api:
     build:
       context: .
@@ -8,6 +9,8 @@ services:
       - "8080:8080"
     environment:
       LOG_LEVEL: "DEBUG"
+    env_file:
+      - .env  # This reads from host .env file
     volumes:
       - $PWD/.env:/usr/app/.env
     healthcheck:
@@ -16,4 +19,59 @@ services:
       timeout: 10s
       start_period: 30s
       retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
+      migration:
+        condition: service_completed_successfully
+    networks:
+      - service-network
     restart: unless-stopped
+    profiles:
+      - all
+
+  db:
+    image: public.ecr.aws/docker/library/postgres
+    ports:
+        - '5432:5432'
+    restart: always
+    environment:
+        POSTGRES_USER: develop
+        POSTGRES_PASSWORD: develop_secret
+        POSTGRES_DB: develop
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U develop" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - service-network
+    profiles:
+      - all
+      - db
+
+  migration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: migration-runner
+    command: python src/utils/cli/migration.py
+    environment:
+      LOG_LEVEL: "DEBUG"
+      PYTHONPATH: /usr/app/src
+      DATABASE_URL: postgresql://develop:develop_secret@db:5432/develop # Override for migration
+    env_file:
+      - .env  # This reads from host .env file
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - service-network
+    restart: "no"
+    profiles:
+      - all
+      - db
+
+networks:
+  service-network:
+    driver: bridge

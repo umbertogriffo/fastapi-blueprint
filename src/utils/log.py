@@ -85,6 +85,12 @@ def get_logger():
         logging.getLogger("uvicorn.access").disabled = True
         logging.getLogger("uvicorn.access").propagate = False
 
+        # Set SQLAlchemy engine logger level
+        # https://docs.sqlalchemy.org/en/20/core/engines.html#configuring-logging
+        logging.getLogger("sqlalchemy.engine").setLevel(settings.LOG_LEVEL)
+        logging.getLogger("sqlalchemy.engine").propagate = settings.LOG_DATABASE_QUERIES
+        logging.getLogger("sqlalchemy.pool").setLevel(settings.LOG_LEVEL)
+
         # Stream handler to stdout
         handler = logging.StreamHandler(sys.stdout)
         handler.setLevel(settings.LOG_LEVEL)

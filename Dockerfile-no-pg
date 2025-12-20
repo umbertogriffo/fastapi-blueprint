@@ -1,14 +1,8 @@
-FROM python:3.10-alpine AS builder
+FROM python:3.10-slim AS builder
 
 # Update image
-RUN apk update && \
-    apk add --no-cache \
-    build-base \
-    gcc \
-    libffi-dev \
-    musl-dev \
-    postgresql-dev \
-    python3-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv
@@ -45,12 +39,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN addgroup --system appuser && adduser --system appuser --ingroup appuser
 
 # Install curl for health checks and other dependencies
-RUN apk add --no-cache \
-    curl \
-    gcompat \
-    libgcc \
-    libpq \
-    libstdc++
+RUN apk add --no-cache curl libgcc libstdc++ gcompat && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the installed environment from builder
 # Change ownership of the working directory to the non-root user.

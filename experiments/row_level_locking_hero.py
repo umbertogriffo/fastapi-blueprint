@@ -3,7 +3,7 @@ import time
 
 from models import UUID7, Hero
 from sqlalchemy import Engine
-from sqlmodel import Session, create_engine, select
+from sqlmodel import Session, SQLModel, create_engine, select
 
 
 def update_without_lock(engine: Engine, hero_id: UUID7, new_age: int, delay: float):
@@ -55,6 +55,7 @@ def concurrent_update_test():
     With it, the second transaction waits until the first commits.
     """
     engine = create_engine("postgresql://develop:develop_secret@localhost:5432/develop")
+    SQLModel.metadata.create_all(engine)
 
     # Create test hero
     with Session(engine) as session:

@@ -49,7 +49,9 @@ def test_create_user(client: TestClient):
 
 
 def test_create_user_invalid_data(client: TestClient):
+    # Build raw request dict to bypass Pydantic validation
     user_data = {"invalid_field": "NewUser"}
+
     response = client.post(
         url="/users/",
         headers={"Authorization": settings.API_KEY.get_secret_value()},
@@ -73,7 +75,9 @@ def test_create_user_with_check_success(client: TestClient):
 
 
 def test_create_user_with_check_reserved_name(client: TestClient):
+    # Build raw request dict to bypass Pydantic validation
     user_data = {"name": "admin"}
+
     response = client.post(
         url="/users/check",
         headers={"Authorization": settings.API_KEY.get_secret_value()},
@@ -85,7 +89,9 @@ def test_create_user_with_check_reserved_name(client: TestClient):
 
 
 def test_create_user_with_check_invalid_data(client: TestClient):
+    # Build raw request dict to bypass Pydantic validation
     user_data = {"name": ""}
+
     response = client.post(
         url="/users/check",
         headers={"Authorization": settings.API_KEY.get_secret_value()},

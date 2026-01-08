@@ -20,7 +20,7 @@ def test_create_hero(client_with_db: TestClient, session: Session):
 def test_create_hero_incomplete(client: TestClient):
     # No secret_name
     response = client.post("/heroes/", json={"name": "Deadpond"})
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 def test_create_hero_invalid(client: TestClient):
@@ -32,7 +32,7 @@ def test_create_hero_invalid(client: TestClient):
             "secret_name": {"message": "Do you wanna know my secret identity?"},
         },
     )
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 def test_read_heroes(session: Session, client_with_db: TestClient):
@@ -45,7 +45,7 @@ def test_read_heroes(session: Session, client_with_db: TestClient):
     response = client_with_db.get("/heroes/")
     data = response.json()
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     assert len(data) == 2
     assert data[0]["name"] == hero_1.name
@@ -66,7 +66,7 @@ def test_read_hero(session: Session, client_with_db: TestClient):
     response = client_with_db.get(f"/heroes/{hero_1.id}")
     data = response.json()
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert data["name"] == hero_1.name
     assert "secret_name" not in data.keys()
     assert data["age"] == hero_1.age
@@ -81,7 +81,7 @@ def test_update_hero(session: Session, client_with_db: TestClient):
     response = client_with_db.patch(f"/heroes/{hero_1.id}", json={"name": "Deadpuddle"})
     data = response.json()
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert data["name"] == "Deadpuddle"
     assert "secret_name" not in data.keys()
     assert data["age"] is None
@@ -97,7 +97,7 @@ def test_delete_hero(session: Session, client_with_db: TestClient):
 
     hero_in_db = session.get(Hero, hero_1.id)
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert hero_in_db is None
 
 

@@ -27,6 +27,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: public.ecr.aws/docker/library/postgres:17
+        env:
+          POSTGRES_USER: develop
+          POSTGRES_PASSWORD: develop_secret
+          POSTGRES_DB: develop
+        ports:
+          - 5432:5432
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -48,8 +57,14 @@ jobs:
       - name: Install the project
         run: uv sync --locked --all-extras --dev
 
-      - name: Run tests
+      - name: Run tests (SQLite)
         env:
           API_KEY: TEST
         run: |
           uv run pytest -s --durations=5 --log-cli-level=INFO --capture=tee-sys -v
+
+      - name: Run tests (Postgres)
+        env:
+          API_KEY: TEST
+        run: |
+          uv run pytest -s --db postgres --durations=5 --log-cli-level=INFO --capture=tee-sys -v

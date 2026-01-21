@@ -64,7 +64,8 @@ def session_fixture(request, monkeypatch) -> Session:
 
     # Clean up
     engine.dispose()
-    os.unlink(path)
+    if path:
+        os.unlink(path)
 
 
 @pytest.fixture(name="client_with_db")

@@ -67,4 +67,4 @@ jobs:
         env:
           API_KEY: TEST
         run: |
-          uv run pytest --db postgres -s --durations=5 --log-cli-level=INFO --capture=tee-sys -v
+          uv run pytest -s --db postgres --durations=5 --log-cli-level=INFO --capture=tee-sys -v

@@ -62,6 +62,7 @@ def session_fixture(request, monkeypatch) -> Session:
     # create_db_and_tables(engine)
 
     # Ensure that changes made during tests do not persist and affect other tests using a nested transaction
+    # This is needed for PostgreSQL since the SQLite is erased after each test by deleting the temp file
     connection = engine.connect()
     transaction = connection.begin()
     session = Session(bind=connection)

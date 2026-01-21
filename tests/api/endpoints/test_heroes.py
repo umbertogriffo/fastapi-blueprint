@@ -101,7 +101,7 @@ def test_delete_hero(session: Session, client_with_db: TestClient):
     assert hero_in_db is None
 
 
-def test_update_hero_rollback_on_error(
+def test_update_hero_rollback_on_commit_error(
     mocker, client_with_db: TestClient, session: Session
 ):
     """Test that updating a hero rolls back on commit error."""

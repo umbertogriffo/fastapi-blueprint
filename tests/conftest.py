@@ -62,6 +62,10 @@ def session_fixture(request, monkeypatch) -> Session:
     with Session(engine) as session:
         yield session
 
+    # For Postgres, clean up all data between tests
+    if db_type == "postgres":
+        command.downgrade(config, "base")
+
     # Clean up
     engine.dispose()
     if path:

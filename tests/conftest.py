@@ -11,21 +11,38 @@ from sqlmodel import Session, create_engine
 from starlette.testclient import TestClient
 
 
+def pytest_addoption(parser):
+    """Add custom command line options."""
+    parser.addoption(
+        "--db",
+        action="store",
+        default="sqlite",
+        choices=["sqlite", "postgres"],
+        help="Database to use for tests: sqlite (default) or postgres",
+    )
+
+
 @pytest.fixture
 def data_folder_path():
     return Path(__file__).parent.parent / "data"
 
 
 @pytest.fixture(name="session")
-def session_fixture(monkeypatch) -> Session:
+def session_fixture(request, monkeypatch) -> Session:
     """Create a new database session for a test."""
     # TODO: Use an in-memory SQLite database for faster tests if possible.
     #       https://sqlmodel.tiangolo.com/tutorial/fastapi/tests/#memory-database
 
-    # Create a temporary database file
-    fd, path = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
-    db_url = f"sqlite:///{path}"
+    db_type = request.config.getoption("--db")
+
+    if db_type == "postgres":
+        db_url = "postgresql://develop:develop_secret@localhost:5432/develop"
+        path = None
+    else:
+        # Create a temporary database file for SQLite
+        fd, path = tempfile.mkstemp(suffix=".db")
+        os.close(fd)
+        db_url = f"sqlite:///{path}"
 
     # Use monkeypatch to set DATABASE_URL environment variable
     monkeypatch.setattr("config.settings.DATABASE_URL", db_url)

@@ -3,6 +3,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+import sqlalchemy as sa
 from alembic import command
 from alembic.config import Config
 from api.deps import get_db_session
@@ -59,12 +60,25 @@ def session_fixture(request, monkeypatch) -> Session:
     engine = create_engine(db_url)
     # TODO: Alternatively, you can create tables directly without migrations for simpler setups.
     # create_db_and_tables(engine)
-    with Session(engine) as session:
-        yield session
 
-    # For Postgres, clean up all data between tests
-    if db_type == "postgres":
-        command.downgrade(config, "base")
+    # Use a nested transaction for better test isolation
+    connection = engine.connect()
+    transaction = connection.begin()
+    session = Session(bind=connection)
+
+    nested = connection.begin_nested()
+
+    @sa.event.listens_for(session, "after_transaction_end")
+    def end_savepoint(session, transaction):
+        nonlocal nested
+        if not nested.is_active:
+            nested = connection.begin_nested()
+
+    yield session
+
+    session.close()
+    transaction.rollback()
+    connection.close()
 
     # Clean up
     engine.dispose()

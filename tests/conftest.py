@@ -61,7 +61,7 @@ def session_fixture(request, monkeypatch) -> Session:
     # TODO: Alternatively, you can create tables directly without migrations for simpler setups.
     # create_db_and_tables(engine)
 
-    # Use a nested transaction for better test isolation
+    # Ensure that changes made during tests do not persist and affect other tests using a nested transaction
     connection = engine.connect()
     transaction = connection.begin()
     session = Session(bind=connection)

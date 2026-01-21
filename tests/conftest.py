@@ -45,7 +45,7 @@ def session_fixture(request, monkeypatch) -> Session:
         db_url = f"sqlite:///{path}"
 
     # Use monkeypatch to set DATABASE_URL environment variable
-    monkeypatch.setattr("config.settings.DATABASE_URL", db_url)
+    monkeypatch.setenv("DATABASE_URL", db_url)
 
     # Get path to alembic.ini
     src_dir = Path(__file__).parents[1] / "src"

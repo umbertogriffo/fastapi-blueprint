@@ -1,6 +1,7 @@
-from database import check_health_safe, engine
+from database import check_health_safe
 from fastapi import APIRouter
 from starlette import status
+from state import engine
 
 router = APIRouter()
 

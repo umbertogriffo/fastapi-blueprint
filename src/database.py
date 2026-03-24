@@ -78,6 +78,3 @@ def create_db_and_tables(engine: Engine):
     Create database tables based on the defined SQLModel models.
     """
     SQLModel.metadata.create_all(engine)
-
-
-engine = create_db_engine()

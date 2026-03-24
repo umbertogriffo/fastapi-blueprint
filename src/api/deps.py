@@ -1,7 +1,7 @@
 from typing import Annotated, Generator
 
+import state
 from config import settings
-from database import engine
 from fastapi import Depends, HTTPException
 from fastapi.security import APIKeyHeader
 from sqlmodel import Session
@@ -16,7 +16,7 @@ def get_db_session() -> Generator[Session, None, None]:
     """
     Create a new database session and close the session after the operation has ended.
     """
-    with Session(engine) as session:
+    with Session(state.engine) as session:
         yield session
 
 

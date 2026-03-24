@@ -1,16 +1,20 @@
 import os
 from contextlib import asynccontextmanager
 
+import state
 import uvicorn
 from api.exception_handlers import validation_exception_handler
 from api.router import router
 from config import init_whatever, settings
-from database import engine
+from database import create_db_engine
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from middlewares.logging import LogMiddleware
 from pydantic import ValidationError
+from utils.log import get_logger
+
+logger = get_logger()
 
 
 @asynccontextmanager
@@ -20,9 +24,14 @@ async def lifespan(app: FastAPI):
     # It may be stored in app state object:
     # app.state.some_resource = SomeResource()
     # https://github.com/fastapi/fastapi/discussions/13029
+
+    state.engine = create_db_engine()
     yield
+
     # Clean up
-    engine.dispose()
+    if state.engine:
+        state.engine.dispose()
+        logger.info("Database engine disposed")
 
 
 app = FastAPI(title=settings.SERVICE_NAME, version="0.1.0", lifespan=lifespan)

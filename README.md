@@ -42,13 +42,21 @@ Repo Features:
 ## Prerequisites
 
 * Python 3.10+
-* uv 0.8.17+
+* uv 0.11.3+
 * PostgreSQL 18.1+ (if you want to use PostgreSQL as database)
 
 ### Install uv
 
 Install `uv` with the official installer by following
 this [link](https://docs.astral.sh/uv/getting-started/installation/).
+
+You must use the current adopted version of `uv`
+defined [here](https://github.com/umbertogriffo/fastapi-blueprint/blob/main/version/uv).
+
+If you have `uv` already installed, and it is not the right version, you can downgrade (or upgrade) `uv` through:
+```shell
+uv self update 0.11.3
+```
 
 ## Bootstrap Environment
 

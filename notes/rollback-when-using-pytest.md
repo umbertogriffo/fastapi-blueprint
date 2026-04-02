@@ -1,6 +1,4 @@
-# Note
-
-## Rollback when using pytest
+# Rollback when using pytest
 
 When using `pytest` with SQLModel and a database, it's important to ensure that changes made during tests do not persist and affect other tests.
 

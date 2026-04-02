@@ -30,6 +30,8 @@ pythonpath = [
 
 [tool.uv]
 package = true
+# Dependency cooldowns to mitigate supply chain attacks
+exclude-newer = "30 days"
 
 [project.scripts]
 migrate-db = "utils.cli.migration:main"

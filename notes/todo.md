@@ -2,8 +2,8 @@
 - Update to FastAPI 0.131.0, so Pydantic serializes each item to JSON (on Rust) for max perf. Just declare the response model - return type - https://fastapi.tiangolo.com/advanced/custom-response/#json-performance
 - In case of DeprecationWarning `HTTP_422_UNPROCESSABLE_ENTITY` is deprecated. Use `HTTP_422_UNPROCESSABLE_CONTENT` instead in exception_handlers.py
   - https://stackoverflow.com/questions/79789459/deprecationwarning-http-422-unprocessable-entity-is-deprecated-use-http-422
-- Try to replace the docker_compose.py with [just](https://github.com/casey/just)
-- [Moving from Sync to Async in FastAPI with SQLModel—What you Need to Know](https://www.linkedin.com/pulse/moving-from-sync-async-fastapi-sqlmodelwhat-you-need-know-vertrees-eowtc/)
+- Try to replace the `docker_compose.py` with [just](https://github.com/casey/just)
+- [Moving from Sync to Async in FastAPI with SQLModel - What you Need to Know](https://www.linkedin.com/pulse/moving-from-sync-async-fastapi-sqlmodelwhat-you-need-know-vertrees-eowtc/)
   - https://github.com/fastapi/fastapi/discussions/4302
   - https://www.youtube.com/watch?v=I8WiIXMDydw
   - https://www.youtube.com/watch?v=AtHEX76Wysw

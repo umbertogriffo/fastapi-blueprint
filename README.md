@@ -41,7 +41,7 @@ Repo Features:
 
 ## Prerequisites
 
-* Python 3.10+
+* Python 3.12+
 * uv 0.11.3+
 * PostgreSQL 18.1+ (if you want to use PostgreSQL as database)
 

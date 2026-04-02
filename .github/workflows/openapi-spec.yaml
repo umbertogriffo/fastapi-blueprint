@@ -24,10 +24,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Get python version
+        id: python-version
+        run: echo "python-version=$(cat version/python-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Install Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10.6'
+          python-version: ${{ steps.python-version.outputs.python-version }}
 
       - name: Get uv version
         id: uv-version
